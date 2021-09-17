@@ -7,7 +7,7 @@ Amplify.configure({
         logStreamName: '1-plugin'
     },
     ...config,
-    ssr: true
+    // ssr: true
 });
 
 const browserLogger = new Logger('Log to browser');
@@ -16,21 +16,12 @@ const ssLogger = new Logger('Log to cloudwatch');
 Amplify.register(ssLogger);
 ssLogger.addPluggable(new AWSCloudWatchProvider());
 
-export async function getServerSideProps({params}) {
-    console.log("Doing serverside rendering...");
-    try {
-      ssLogger.warn('Clicking??');
-    } catch (error) {
-
-    }
-    return {props: {ssrData: {name: "Some SSR data", timestamp: (new Date()).toUTCString()}}};
-}
-
-const App = ({ssrData}) => {
+const App = () => {
     return (
         <div onClick={() => {
             browserLogger.warn('Clicking??');
-        }}>{ssrData.timestamp}</div>
+            ssLogger.warn('Clicking??');
+        }}>Boe</div>
     )
 }
 
