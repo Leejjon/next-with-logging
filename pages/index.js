@@ -1,16 +1,33 @@
-import styles from '../styles/Home.module.css';
+import Amplify, {AWSCloudWatchProvider, Logger} from 'aws-amplify';
+import config from "../aws-exports.js";
 
-export async function getServerSideProps({ params }) {
-  console.log("Doing serverside rendering...");
-  return { props: { ssrData: {name: "Some SSR data", timestamp: (new Date()).toUTCString()}} };
+Amplify.configure({
+    Logging: {
+        logGroupName: 'plugin-1',
+        logStreamName: '1-plugin'
+    },
+    ...config,
+    ssr: true
+});
+
+const browserLogger = new Logger('Log to browser');
+const ssLogger = new Logger('Log to cloudwatch');
+
+Amplify.register(ssLogger);
+ssLogger.addPluggable(new AWSCloudWatchProvider());
+
+export async function getServerSideProps({params}) {
+    console.log("Doing serverside rendering...");
+    return {props: {ssrData: {name: "Some SSR data", timestamp: (new Date()).toUTCString()}}};
 }
 
 const App = ({ssrData}) => {
-  return (
-    <div className={styles.container}>
-      Hi {ssrData.timestamp}
-    </div>
-  )
+    return (
+        <div onClick={() => {
+            browserLogger.warn('Clicking??');
+            ssLogger.warn('Clicking??');
+        }}>{ssrData.timestamp}</div>
+    )
 }
 
 export default App;
