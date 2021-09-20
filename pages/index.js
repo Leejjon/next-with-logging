@@ -1,5 +1,6 @@
 import Amplify, {Logger} from 'aws-amplify';
 import config from "../aws-exports.js";
+import SomePage from "./page";
 
 Amplify.configure({
     ...config,
@@ -17,7 +18,7 @@ const App = ({ssrData}) => {
     return (
         <div onClick={() => {
             browserLogger.warn('Clicking??');
-        }}>{ssrData.timestamp}</div>
+        }}>{ssrData.timestamp}<SomePage /></div>
     )
 }
 
