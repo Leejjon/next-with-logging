@@ -17,7 +17,6 @@ const App = ({ssrData}) => {
     return (
         <div onClick={() => {
             browserLogger.warn('Clicking??');
-            ssLogger.warn('Clicking??');
         }}>{ssrData.timestamp}</div>
     )
 }
